@@ -1,0 +1,1128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>TONIC — gotta go fast on TON</title>
+  <meta name="description" content="Tonic is the fastest hedgehog on The Open Network. Sonic-speed memetics. Launching on stonks.labs." />
+  <meta name="theme-color" content="#0098EA" />
+  <meta property="og:title" content="TONIC — gotta go fast on TON" />
+  <meta property="og:description" content="Sonic-speed memetics on The Open Network. Launching on stonks.labs." />
+  <meta property="og:image" content="tonicbanner.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="tonicbanner.png" />
+  <link rel="icon" type="image/png" href="toniclogo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* =========================================================
+       TONIC — single-file build
+       palette: TON blue / electric cyan / hot yellow accent
+       ========================================================= */
+
+    :root {
+      --ton: #0098EA;
+      --ton-deep: #0066B3;
+      --ton-dark: #00121F;
+      --ton-night: #00060F;
+      --cyan: #5EE3FF;
+      --yellow: #FFE600;
+      --hot: #FF3D7F;
+      --ink: #EAF6FF;
+      --ink-soft: #B7D8EE;
+      --ink-dim: #6E94B0;
+      --line: rgba(94, 227, 255, 0.18);
+      --card: rgba(0, 152, 234, 0.08);
+      --card-hi: rgba(94, 227, 255, 0.10);
+
+      --f-display: "Bowlby One", system-ui, sans-serif;
+      --f-body: "Space Grotesk", system-ui, sans-serif;
+      --f-mono: "JetBrains Mono", ui-monospace, monospace;
+
+      --r-sm: 10px;
+      --r-md: 18px;
+      --r-lg: 28px;
+      --r-xl: 40px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; overflow-x: hidden; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--f-body);
+      color: var(--ink);
+      background: var(--ton-night);
+      background-image:
+        radial-gradient(1200px 600px at 80% -10%, rgba(0, 152, 234, 0.45), transparent 60%),
+        radial-gradient(900px 500px at 0% 30%, rgba(94, 227, 255, 0.18), transparent 60%),
+        linear-gradient(180deg, #00060F 0%, #00121F 50%, #00060F 100%);
+      background-attachment: fixed;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img, video { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+
+    ::selection { background: var(--yellow); color: var(--ton-dark); }
+
+    /* ====== Buttons ====== */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px;
+      padding: 14px 22px;
+      border-radius: 999px;
+      font-family: var(--f-display);
+      font-size: 15px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      transition: transform .15s ease, box-shadow .2s ease, background .2s ease;
+      will-change: transform;
+      white-space: nowrap;
+    }
+    .btn--primary {
+      background: linear-gradient(180deg, var(--cyan), var(--ton));
+      color: var(--ton-dark);
+      box-shadow:
+        0 8px 24px rgba(0, 152, 234, 0.45),
+        inset 0 -3px 0 rgba(0,0,0,0.18),
+        inset 0 2px 0 rgba(255,255,255,0.5);
+    }
+    .btn--primary:hover { transform: translateY(-2px); }
+    .btn--primary:active { transform: translateY(0); }
+    .btn--ghost {
+      background: rgba(94, 227, 255, 0.06);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      backdrop-filter: blur(6px);
+    }
+    .btn--ghost:hover { background: rgba(94, 227, 255, 0.12); }
+    .btn--xl { padding: 18px 30px; font-size: 18px; }
+
+    /* ====== Top ticker ====== */
+    .ticker {
+      position: sticky; top: 0; z-index: 50;
+      background: var(--yellow);
+      color: #1a1a1a;
+      border-bottom: 3px solid #000;
+      overflow: hidden;
+      font-family: var(--f-display);
+      letter-spacing: 0.05em;
+    }
+    .ticker__track {
+      display: inline-flex; align-items: center; gap: 28px;
+      white-space: nowrap;
+      padding: 9px 0;
+      animation: scroll-x 30s linear infinite;
+    }
+    .ticker__track .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #000; display: inline-block;
+    }
+    @keyframes scroll-x {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ====== Nav ====== */
+    .nav {
+      position: relative; z-index: 20;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 36px;
+      max-width: 1280px; margin: 0 auto;
+    }
+    .nav__brand {
+      display: flex; align-items: center; gap: 12px;
+      font-family: var(--f-display);
+      font-size: 22px;
+      letter-spacing: 0.05em;
+    }
+    .nav__brand img { width: 38px; height: 38px; border-radius: 10px; }
+    .nav__links {
+      display: flex; gap: 30px;
+      font-weight: 500;
+    }
+    .nav__links a {
+      color: var(--ink-soft);
+      transition: color .15s ease;
+      font-size: 15px;
+    }
+    .nav__links a:hover { color: var(--cyan); }
+    @media (max-width: 880px) { .nav__links { display: none; } }
+
+    /* ====== HERO ====== */
+    .hero { position: relative; padding: 40px 36px 80px; max-width: 1280px; margin: 0 auto; }
+    .hero__bg {
+      position: absolute; inset: -40px 0 -120px 0; z-index: 0;
+      pointer-events: none; overflow: hidden;
+    }
+    .grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(94,227,255,0.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(94,227,255,0.07) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: radial-gradient(ellipse at 50% 30%, black 30%, transparent 70%);
+    }
+    .rings {
+      position: absolute; inset: 0;
+    }
+    .rings span {
+      position: absolute;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      border: 4px solid var(--yellow);
+      box-shadow: 0 0 18px rgba(255, 230, 0, 0.55);
+      animation: ringfloat 6s ease-in-out infinite;
+      opacity: 0.85;
+    }
+    .rings span:nth-child(1) { top: 8%;  left: 4%;  animation-delay: 0s; }
+    .rings span:nth-child(2) { top: 70%; left: 10%; animation-delay: 1s; transform: scale(.7); }
+    .rings span:nth-child(3) { top: 20%; left: 88%; animation-delay: .4s; transform: scale(1.3); }
+    .rings span:nth-child(4) { top: 55%; left: 92%; animation-delay: 2.1s; }
+    .rings span:nth-child(5) { top: 85%; left: 60%; animation-delay: 1.6s; transform: scale(.9); }
+    .rings span:nth-child(6) { top: 12%; left: 50%; animation-delay: .9s; transform: scale(.5); }
+    .rings span:nth-child(7) { top: 40%; left: 18%; animation-delay: 2.6s; transform: scale(.6); }
+    .rings span:nth-child(8) { top: 78%; left: 35%; animation-delay: 3.1s; transform: scale(1.1); }
+    .rings span:nth-child(9) { top: 30%; left: 75%; animation-delay: 1.3s; transform: scale(.8); }
+    .rings span:nth-child(10){ top: 5%;  left: 70%; animation-delay: 2s; transform: scale(.7); }
+    @keyframes ringfloat {
+      0%, 100% { transform: translateY(0) scale(var(--s, 1)); }
+      50%      { transform: translateY(-20px) scale(var(--s, 1)); }
+    }
+
+    .hero__inner {
+      position: relative; z-index: 1;
+      display: grid; grid-template-columns: 1.05fr 1fr;
+      gap: 50px; align-items: center;
+    }
+    @media (max-width: 980px) {
+      .hero__inner { grid-template-columns: 1fr; gap: 30px; }
+    }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 8px 14px;
+      background: rgba(94, 227, 255, 0.08);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-family: var(--f-mono);
+      font-size: 13px;
+      color: var(--cyan);
+      letter-spacing: 0.04em;
+    }
+    .badge__pulse {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 0 0 rgba(94, 227, 255, 0.8);
+      animation: pulse 1.6s infinite;
+    }
+    @keyframes pulse {
+      0%   { box-shadow: 0 0 0 0   rgba(94, 227, 255, 0.7); }
+      70%  { box-shadow: 0 0 0 10px rgba(94, 227, 255, 0); }
+      100% { box-shadow: 0 0 0 0   rgba(94, 227, 255, 0); }
+    }
+
+    .hero__title {
+      font-family: var(--f-display);
+      font-size: clamp(72px, 13vw, 180px);
+      line-height: 0.86;
+      margin: 24px 0 22px;
+      letter-spacing: -0.02em;
+    }
+    .hero__title .line {
+      display: block;
+      background: linear-gradient(180deg, #FFFFFF 0%, #B7D8EE 100%);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      text-shadow: 0 4px 0 rgba(0, 152, 234, 0.15);
+    }
+    .hero__title .line--accent {
+      background: linear-gradient(180deg, var(--yellow), #FFA800);
+      -webkit-background-clip: text; background-clip: text;
+      color: transparent;
+      transform: skewX(-8deg);
+      display: inline-block;
+      filter: drop-shadow(0 0 22px rgba(255, 230, 0, 0.35));
+    }
+
+    .hero__sub {
+      max-width: 520px;
+      font-size: 19px;
+      color: var(--ink-soft);
+      margin-bottom: 30px;
+    }
+    .hero__cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 38px; }
+
+    .hero__stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      list-style: none;
+      max-width: 560px;
+    }
+    .hero__stats li {
+      padding: 14px 14px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-md);
+      background: var(--card);
+      text-align: center;
+    }
+    .hero__stats b {
+      display: block;
+      font-family: var(--f-display);
+      color: var(--cyan);
+      font-size: 22px;
+      letter-spacing: 0.02em;
+    }
+    .hero__stats span {
+      font-size: 12px;
+      color: var(--ink-dim);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 520px) { .hero__stats { grid-template-columns: repeat(2, 1fr); } }
+
+    /* ====== Hero art ====== */
+    .hero__art { position: relative; aspect-ratio: 1 / 1; }
+    .hero__video {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: var(--r-xl);
+      border: 2px solid var(--line);
+      background: #000;
+      box-shadow:
+        0 30px 80px rgba(0, 152, 234, 0.35),
+        inset 0 0 0 6px rgba(0,0,0,0.3);
+    }
+    .speedlines {
+      position: absolute; inset: 0;
+      pointer-events: none;
+      border-radius: var(--r-xl);
+      overflow: hidden;
+      mask-image: linear-gradient(90deg, black 0%, transparent 60%);
+    }
+    .speedlines::before, .speedlines::after {
+      content: "";
+      position: absolute; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, transparent, var(--cyan) 40%, transparent);
+      opacity: 0.6;
+      animation: speed 1.4s linear infinite;
+    }
+    .speedlines::before { top: 25%; animation-delay: 0s; }
+    .speedlines::after  { top: 70%; animation-delay: .5s; }
+    @keyframes speed {
+      0%   { transform: translateX(-30%); opacity: 0; }
+      40%  { opacity: 0.6; }
+      100% { transform: translateX(120%); opacity: 0; }
+    }
+
+    /* ====== Contract pill ====== */
+    .hero__contract {
+      position: relative; z-index: 2;
+      display: flex; flex-wrap: wrap; align-items: center; gap: 12px;
+      margin: 50px auto 0;
+      padding: 14px 18px;
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      max-width: max-content;
+      font-family: var(--f-mono);
+    }
+    .hero__contract-label { color: var(--cyan); font-weight: 700; font-size: 14px; }
+    .hero__contract code {
+      color: var(--ink);
+      font-size: 14px;
+    }
+    .btn-copy {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: var(--yellow);
+      color: var(--ton-dark);
+      font-family: var(--f-display);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .btn-copy:hover { background: #fff200; }
+
+    /* ====== Big marquee ====== */
+    .marquee {
+      background: var(--ton);
+      color: var(--ton-night);
+      padding: 18px 0;
+      overflow: hidden;
+      border-top: 3px solid #000;
+      border-bottom: 3px solid #000;
+      transform: rotate(-2deg);
+      margin: 50px -10px;
+      box-shadow: 0 20px 50px rgba(0, 152, 234, 0.4);
+    }
+    .marquee__track {
+      display: inline-flex;
+      white-space: nowrap;
+      animation: scroll-x 22s linear infinite;
+      font-family: var(--f-display);
+      font-size: clamp(40px, 7vw, 90px);
+      letter-spacing: -0.01em;
+    }
+    .marquee__track span { padding-right: 30px; }
+
+    /* ====== Section heads ====== */
+    .section-head { max-width: 1280px; margin: 0 auto; padding: 0 36px 30px; }
+    .eyebrow {
+      display: inline-block;
+      font-family: var(--f-mono);
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+    .section-head h2,
+    .about__copy h2 {
+      font-family: var(--f-display);
+      font-size: clamp(36px, 5vw, 60px);
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+
+    /* ====== About ====== */
+    .about { padding: 80px 36px; max-width: 1280px; margin: 0 auto; }
+    .about__inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    @media (max-width: 980px) { .about__inner { grid-template-columns: 1fr; gap: 40px; } }
+
+    .about__copy p {
+      color: var(--ink-soft);
+      font-size: 17px;
+      margin-top: 16px;
+      max-width: 560px;
+    }
+    .about__chips {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      margin-top: 28px;
+    }
+    .about__chips span {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(94, 227, 255, 0.08);
+      border: 1px solid var(--line);
+      font-family: var(--f-mono);
+      font-size: 13px;
+      color: var(--cyan);
+    }
+
+    .about__card {
+      padding: 24px;
+      border: 1px solid var(--line);
+      border-radius: var(--r-lg);
+      background:
+        linear-gradient(135deg, rgba(0, 152, 234, 0.18), rgba(94, 227, 255, 0.04));
+      backdrop-filter: blur(10px);
+    }
+    .card-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 520px) { .card-grid { grid-template-columns: 1fr; } }
+    .feat {
+      padding: 22px;
+      border-radius: var(--r-md);
+      background: rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--line);
+      transition: transform .2s ease, border-color .2s ease;
+    }
+    .feat:hover { transform: translateY(-3px); border-color: var(--cyan); }
+    .feat__num {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .feat h3 {
+      font-family: var(--f-display);
+      font-size: 24px;
+      color: #fff;
+      margin-bottom: 6px;
+    }
+    .feat p { font-size: 14px; color: var(--ink-soft); }
+
+    /* ====== Tokenomics ====== */
+    .tokenomics { padding: 80px 0; }
+    .tokenomics__grid {
+      max-width: 1280px; margin: 0 auto;
+      padding: 0 36px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 880px) { .tokenomics__grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .tokenomics__grid { grid-template-columns: 1fr; } }
+
+    .tk-card {
+      padding: 22px;
+      border-radius: var(--r-lg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform .2s ease;
+    }
+    .tk-card:hover { transform: translateY(-3px); }
+    .tk-card--big { grid-column: span 2; grid-row: span 2;
+      background: linear-gradient(135deg, var(--ton), #003F66);
+      color: #fff;
+      border-color: rgba(255,255,255,0.18);
+    }
+    @media (max-width: 880px) {
+      .tk-card--big { grid-column: span 2; grid-row: auto; }
+    }
+    @media (max-width: 520px) {
+      .tk-card--big { grid-column: span 1; }
+    }
+    .tk-card__label {
+      display: block;
+      font-family: var(--f-mono);
+      font-size: 12px;
+      letter-spacing: 0.12em;
+      color: var(--cyan);
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+    .tk-card--big .tk-card__label { color: var(--yellow); }
+    .tk-card__value {
+      display: block;
+      font-family: var(--f-display);
+      font-size: 32px;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+    .tk-card--big .tk-card__value { font-size: clamp(48px, 8vw, 88px); line-height: 1; }
+    .tk-card__hint {
+      display: block;
+      margin-top: 10px;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+    .tk-card--split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; }
+    .tk-card--split .tk-card__value { font-size: 24px; }
+
+    /* ====== How to buy ====== */
+    .buy { padding: 80px 0; }
+    .steps {
+      max-width: 1280px; margin: 0 auto; padding: 0 36px;
+      list-style: none;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      counter-reset: stepc;
+    }
+    @media (max-width: 880px) { .steps { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .steps { grid-template-columns: 1fr; } }
+    .step {
+      padding: 26px;
+      border-radius: var(--r-lg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s ease, border-color .2s ease;
+    }
+    .step:hover { transform: translateY(-3px); border-color: var(--cyan); }
+    .step::after {
+      content: "";
+      position: absolute; right: -30px; bottom: -30px;
+      width: 110px; height: 110px;
+      border-radius: 50%;
+      border: 6px solid rgba(255, 230, 0, 0.18);
+    }
+    .step__num {
+      font-family: var(--f-display);
+      font-size: 28px;
+      color: var(--yellow);
+      margin-bottom: 12px;
+    }
+    .step h3 {
+      font-family: var(--f-display);
+      font-size: 22px;
+      color: #fff;
+      margin-bottom: 8px;
+    }
+    .step p { font-size: 14px; color: var(--ink-soft); }
+
+    /* ====== Roadmap ====== */
+    .roadmap { padding: 80px 0; }
+    .phases {
+      max-width: 1280px; margin: 0 auto; padding: 0 36px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 980px) { .phases { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .phases { grid-template-columns: 1fr; } }
+    .phase {
+      padding: 24px;
+      border-radius: var(--r-lg);
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: transform .2s ease;
+    }
+    .phase:hover { transform: translateY(-3px); }
+    .phase--accent {
+      background: linear-gradient(160deg, var(--ton), #001E33);
+      border-color: var(--cyan);
+    }
+    .phase header {
+      display: flex; flex-direction: column; gap: 4px;
+      margin-bottom: 16px;
+      padding-bottom: 14px;
+      border-bottom: 1px dashed var(--line);
+    }
+    .phase header span {
+      font-family: var(--f-mono);
+      font-size: 12px;
+      color: var(--cyan);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .phase header b {
+      font-family: var(--f-display);
+      font-size: 22px;
+      color: #fff;
+    }
+    .phase ul { list-style: none; }
+    .phase li {
+      position: relative;
+      padding: 6px 0 6px 22px;
+      color: var(--ink-soft);
+      font-size: 14px;
+    }
+    .phase li::before {
+      content: "";
+      position: absolute; left: 0; top: 12px;
+      width: 8px; height: 8px;
+      border: 2px solid var(--yellow);
+      border-radius: 50%;
+    }
+
+    /* ====== FAQ ====== */
+    .faq { padding: 80px 0; }
+    .faq__list {
+      max-width: 880px; margin: 0 auto; padding: 0 36px;
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .faq details {
+      padding: 20px 24px;
+      border-radius: var(--r-md);
+      background: var(--card);
+      border: 1px solid var(--line);
+      transition: border-color .2s ease;
+    }
+    .faq details[open] { border-color: var(--cyan); }
+    .faq summary {
+      list-style: none;
+      cursor: pointer;
+      font-family: var(--f-display);
+      font-size: 18px;
+      color: #fff;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 16px;
+    }
+    .faq summary::-webkit-details-marker { display: none; }
+    .faq summary::after {
+      content: "+";
+      font-size: 28px; line-height: 1;
+      color: var(--yellow);
+      transition: transform .2s ease;
+    }
+    .faq details[open] summary::after { transform: rotate(45deg); }
+    .faq p {
+      margin-top: 14px;
+      color: var(--ink-soft);
+      font-size: 15px;
+    }
+
+    /* ====== CTA ====== */
+    .cta {
+      padding: 100px 36px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta::before {
+      content: "";
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(800px 400px at 50% 50%, rgba(0,152,234,0.4), transparent 70%);
+      pointer-events: none;
+    }
+    .cta__inner {
+      max-width: 720px; margin: 0 auto;
+      position: relative;
+    }
+    .cta h2 {
+      font-family: var(--f-display);
+      font-size: clamp(54px, 10vw, 130px);
+      line-height: 0.92;
+      color: #fff;
+      letter-spacing: -0.02em;
+    }
+    .cta p {
+      font-size: 19px;
+      color: var(--ink-soft);
+      margin: 18px 0 32px;
+    }
+    .cta__row {
+      display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;
+    }
+
+    /* ====== Footer ====== */
+    .foot {
+      padding: 50px 36px 30px;
+      border-top: 1px solid var(--line);
+      background: rgba(0, 0, 0, 0.3);
+    }
+    .foot__inner {
+      max-width: 1280px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      gap: 30px; flex-wrap: wrap;
+    }
+    .foot__brand { display: flex; align-items: center; gap: 14px; }
+    .foot__brand img { width: 50px; height: 50px; border-radius: 12px; }
+    .foot__brand strong {
+      display: block;
+      font-family: var(--f-display);
+      font-size: 22px;
+      letter-spacing: 0.04em;
+    }
+    .foot__brand span { font-size: 13px; color: var(--ink-dim); }
+    .foot__links {
+      display: flex; gap: 22px; flex-wrap: wrap;
+    }
+    .foot__links a {
+      color: var(--ink-soft);
+      font-size: 14px;
+      transition: color .15s ease;
+    }
+    .foot__links a:hover { color: var(--cyan); }
+    .foot__legal {
+      max-width: 1280px; margin: 30px auto 0;
+      font-size: 12px;
+      color: var(--ink-dim);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* ====== utilities ====== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ TICKER ============ -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker__track">
+      <span>GOTTA GO FAST</span><span class="dot"></span>
+      <span>$TONIC</span><span class="dot"></span>
+      <span>SONIC SPEED ON TON</span><span class="dot"></span>
+      <span>LIVE ON STONKS.LABS</span><span class="dot"></span>
+      <span>NO BRAKES</span><span class="dot"></span>
+      <span>RING THE BELL</span><span class="dot"></span>
+      <span>GOTTA GO FAST</span><span class="dot"></span>
+      <span>$TONIC</span><span class="dot"></span>
+      <span>SONIC SPEED ON TON</span><span class="dot"></span>
+      <span>LIVE ON STONKS.LABS</span><span class="dot"></span>
+      <span>NO BRAKES</span><span class="dot"></span>
+      <span>RING THE BELL</span><span class="dot"></span>
+    </div>
+  </div>
+
+  <!-- ============ NAV ============ -->
+  <header class="nav">
+    <a class="nav__brand" href="#top">
+      <img src="toniclogo.png" alt="Tonic mascot" />
+      <span>TONIC</span>
+    </a>
+    <nav class="nav__links">
+      <a href="#about">About</a>
+      <a href="#tokenomics">Tokenomics</a>
+      <a href="#buy">How to buy</a>
+      <a href="#roadmap">Roadmap</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn btn--primary nav__cta" href="#buy">Buy $TONIC</a>
+  </header>
+
+  <!-- ============ HERO ============ -->
+  <section id="top" class="hero">
+    <div class="hero__bg" aria-hidden="true">
+      <div class="grid"></div>
+      <div class="rings">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <div class="hero__inner">
+      <div class="hero__copy">
+        <div class="badge">
+          <span class="badge__pulse"></span>
+          launching on <b>stonks.labs</b>
+        </div>
+        <h1 class="hero__title">
+          <span class="line">GOTTA</span>
+          <span class="line">GO</span>
+          <span class="line line--accent">FAST.</span>
+        </h1>
+        <p class="hero__sub">
+          Tonic is the blue blur that escaped the lab and landed on
+          The Open Network. One ticker, no brakes, infinite rings.
+        </p>
+        <div class="hero__cta">
+          <a class="btn btn--primary" href="#buy">Get on board</a>
+          <a class="btn btn--ghost" href="#about">Read the lore</a>
+        </div>
+        <ul class="hero__stats">
+          <li><b>1B</b><span>max supply</span></li>
+          <li><b>0/0</b><span>tax forever</span></li>
+          <li><b>100%</b><span>community</span></li>
+          <li><b>TON</b><span>native chain</span></li>
+        </ul>
+      </div>
+
+      <div class="hero__art">
+        <video class="hero__video" autoplay muted loop playsinline poster="tonicbanner.png">
+          <source src="tonic.mp4" type="video/mp4" />
+        </video>
+        <div class="speedlines" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="hero__contract">
+      <span class="hero__contract-label">CA:</span>
+      <code id="contract">TBA — drop on stonks.labs</code>
+      <button class="btn-copy" data-copy="#contract" aria-label="Copy contract">copy</button>
+    </div>
+  </section>
+
+  <!-- ============ MARQUEE BIG ============ -->
+  <div class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      <span>TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;</span>
+      <span>TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;TONIC&nbsp;★&nbsp;</span>
+    </div>
+  </div>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" class="about">
+    <div class="about__inner">
+      <div class="about__copy">
+        <span class="eyebrow">// the lore</span>
+        <h2>Sonic ran out of zones.<br/>So he picked TON.</h2>
+        <p>
+          The Open Network is the fastest L1 the hedgehog could find.
+          Sub-second blocks, gas in cents, a billion Telegram users
+          breathing down its quills. Naturally, Tonic moved in.
+        </p>
+        <p>
+          $TONIC is a community memecoin with no team allocation,
+          no vesting cliff drama, no presale shenanigans.
+          Just velocity, vibes, and a diamond in the palm.
+        </p>
+        <div class="about__chips">
+          <span>fair launch</span>
+          <span>liquidity locked</span>
+          <span>zero tax</span>
+          <span>contract renounced</span>
+          <span>built on TON</span>
+        </div>
+      </div>
+
+      <div class="about__card">
+        <div class="card-grid">
+          <article class="feat">
+            <div class="feat__num">01</div>
+            <h3>Speed</h3>
+            <p>TON does ~5 second finality. Tonic does it in his sleep.</p>
+          </article>
+          <article class="feat">
+            <div class="feat__num">02</div>
+            <h3>Reach</h3>
+            <p>Native to Telegram. Your nan can buy it from a chat.</p>
+          </article>
+          <article class="feat">
+            <div class="feat__num">03</div>
+            <h3>Memetics</h3>
+            <p>Two icons. One token. Zero permission slips signed.</p>
+          </article>
+          <article class="feat">
+            <div class="feat__num">04</div>
+            <h3>Community</h3>
+            <p>100% of supply lives in the wild. Devs hold zero.</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ TOKENOMICS ============ -->
+  <section id="tokenomics" class="tokenomics">
+    <div class="section-head">
+      <span class="eyebrow">// tokenomics</span>
+      <h2>Numbers, in case you read those</h2>
+    </div>
+
+    <div class="tokenomics__grid">
+      <div class="tk-card tk-card--big">
+        <span class="tk-card__label">Total Supply</span>
+        <strong class="tk-card__value">1,000,000,000</strong>
+        <span class="tk-card__hint">one billion TONICs. that's it. no printer.</span>
+      </div>
+      <div class="tk-card">
+        <span class="tk-card__label">Buy / Sell tax</span>
+        <strong class="tk-card__value">0 / 0</strong>
+      </div>
+      <div class="tk-card">
+        <span class="tk-card__label">Liquidity</span>
+        <strong class="tk-card__value">Locked</strong>
+      </div>
+      <div class="tk-card">
+        <span class="tk-card__label">Network</span>
+        <strong class="tk-card__value">TON</strong>
+      </div>
+      <div class="tk-card">
+        <span class="tk-card__label">Launchpad</span>
+        <strong class="tk-card__value">stonks.labs</strong>
+      </div>
+      <div class="tk-card tk-card--split">
+        <div>
+          <span class="tk-card__label">LP</span>
+          <strong class="tk-card__value">90%</strong>
+        </div>
+        <div>
+          <span class="tk-card__label">CEX / Marketing</span>
+          <strong class="tk-card__value">10%</strong>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HOW TO BUY ============ -->
+  <section id="buy" class="buy">
+    <div class="section-head">
+      <span class="eyebrow">// how to buy</span>
+      <h2>Four steps. Roughly four seconds.</h2>
+    </div>
+
+    <ol class="steps">
+      <li class="step">
+        <div class="step__num">01</div>
+        <h3>Get a TON wallet</h3>
+        <p>Tonkeeper, MyTonWallet, or the wallet inside Telegram. All work.</p>
+      </li>
+      <li class="step">
+        <div class="step__num">02</div>
+        <h3>Fund it with TON</h3>
+        <p>Buy TON on any major CEX, or on-ramp directly inside Telegram.</p>
+      </li>
+      <li class="step">
+        <div class="step__num">03</div>
+        <h3>Open stonks.labs</h3>
+        <p>Connect wallet, paste the $TONIC contract, hit swap.</p>
+      </li>
+      <li class="step">
+        <div class="step__num">04</div>
+        <h3>Hold. That's it.</h3>
+        <p>Don't ask for a roadmap to hold. Hedgehogs don't do whitepapers.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- ============ ROADMAP ============ -->
+  <section id="roadmap" class="roadmap">
+    <div class="section-head">
+      <span class="eyebrow">// roadmap</span>
+      <h2>The straightest line on the chart</h2>
+    </div>
+
+    <div class="phases">
+      <article class="phase">
+        <header><span>Phase 01</span><b>Green Hill</b></header>
+        <ul>
+          <li>Stealth deploy on TON</li>
+          <li>Liquidity locked on stonks.labs</li>
+          <li>Contract renounced</li>
+          <li>Telegram & X go live</li>
+        </ul>
+      </article>
+      <article class="phase phase--accent">
+        <header><span>Phase 02</span><b>Chemical Plant</b></header>
+        <ul>
+          <li>10k holders</li>
+          <li>CMC + CoinGecko listings</li>
+          <li>Memes on every TON channel</li>
+          <li>First CEX listing</li>
+        </ul>
+      </article>
+      <article class="phase">
+        <header><span>Phase 03</span><b>Star Light</b></header>
+        <ul>
+          <li>Tier-1 CEX</li>
+          <li>Cross-chain bridge</li>
+          <li>Merch drop</li>
+          <li>Tonic IRL meet-up</li>
+        </ul>
+      </article>
+      <article class="phase">
+        <header><span>Phase 04</span><b>Final Zone</b></header>
+        <ul>
+          <li>Top TON memecoin by volume</li>
+          <li>Sonic-speed culture takeover</li>
+          <li>Rings everywhere</li>
+          <li>Gotta go faster</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============ FAQ ============ -->
+  <section id="faq" class="faq">
+    <div class="section-head">
+      <span class="eyebrow">// faq</span>
+      <h2>Quick questions for fast people</h2>
+    </div>
+
+    <div class="faq__list">
+      <details>
+        <summary>What is Tonic?</summary>
+        <p>Tonic is what happens when the world's fastest hedgehog discovers the world's fastest L1. It's a community memecoin on TON, launching on stonks.labs.</p>
+      </details>
+      <details>
+        <summary>Why TON?</summary>
+        <p>TON is built into Telegram. That's a billion-user funnel with sub-second blocks and cents in gas. If a meme is going to move, it moves there.</p>
+      </details>
+      <details>
+        <summary>Is there a presale?</summary>
+        <p>No. Fair launch on stonks.labs. Same price for everyone, same second.</p>
+      </details>
+      <details>
+        <summary>Are there taxes on the token?</summary>
+        <p>Zero. No buy tax, no sell tax, no transfer tax. Forever.</p>
+      </details>
+      <details>
+        <summary>Who is the team?</summary>
+        <p>Anonymous degens with good taste in 90s mascots. Contract renounced, LP locked. Trust the code, not the faces.</p>
+      </details>
+      <details>
+        <summary>This is financial advice, right?</summary>
+        <p>Absolutely not. $TONIC has no intrinsic value, no expectation of profit, and is purely a meme. DYOR. Only ape what you can afford to lose.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta">
+    <div class="cta__inner">
+      <h2>Ring the bell.</h2>
+      <p>Launch is on stonks.labs. Don't blink.</p>
+      <div class="cta__row">
+        <a class="btn btn--primary btn--xl" href="https://stonks.labs" target="_blank" rel="noopener">Open stonks.labs</a>
+        <a class="btn btn--ghost btn--xl" href="#top">Back to top</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="foot">
+    <div class="foot__inner">
+      <div class="foot__brand">
+        <img src="toniclogo.png" alt="" />
+        <div>
+          <strong>TONIC</strong>
+          <span>gotta go fast on TON</span>
+        </div>
+      </div>
+      <div class="foot__links">
+        <a href="https://t.me/Tonic_onton" target="_blank" rel="noopener">Telegram</a>
+        <a href="https://x.com/toniconton" target="_blank" rel="noopener">X / Twitter</a>
+        <a href="https://stonks.labs" target="_blank" rel="noopener">stonks.labs</a>
+        <a href="#" data-soon>DexScreener</a>
+      </div>
+    </div>
+    <p class="foot__legal">
+      $TONIC is a memecoin with no intrinsic value or expectation of financial return.
+      No formal team, no roadmap obligation, no promises. This site is satire about
+      a fast blue hedgehog. Tonic is not affiliated with SEGA or the TON Foundation.
+    </p>
+  </footer>
+
+  <script>
+    // ===== copy contract =====
+    document.querySelectorAll(".btn-copy").forEach(btn => {
+      btn.addEventListener("click", async () => {
+        const target = document.querySelector(btn.dataset.copy);
+        if (!target) return;
+        const text = target.textContent.trim();
+        try {
+          await navigator.clipboard.writeText(text);
+          const original = btn.textContent;
+          btn.textContent = "copied!";
+          btn.style.background = "#5EE3FF";
+          setTimeout(() => {
+            btn.textContent = original;
+            btn.style.background = "";
+          }, 1400);
+        } catch (e) {
+          // fallback
+          const range = document.createRange();
+          range.selectNode(target);
+          window.getSelection().removeAllRanges();
+          window.getSelection().addRange(range);
+          document.execCommand("copy");
+          window.getSelection().removeAllRanges();
+        }
+      });
+    });
+
+    // ===== "soon" links =====
+    document.querySelectorAll("[data-soon]").forEach(el => {
+      el.addEventListener("click", e => {
+        e.preventDefault();
+        const orig = el.textContent;
+        el.textContent = "soon™";
+        setTimeout(() => { el.textContent = orig; }, 1200);
+      });
+    });
+
+    // ===== parallax-ish rings =====
+    const rings = document.querySelectorAll(".rings span");
+    let ticking = false;
+    window.addEventListener("scroll", () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const y = window.scrollY * 0.15;
+          rings.forEach((r, i) => {
+            const sign = i % 2 === 0 ? 1 : -1;
+            r.style.translate = `0 ${y * sign * 0.1}px`;
+          });
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }, { passive: true });
+  </script>
+</body>
+</html>
